@@ -1,6 +1,6 @@
 /*
 micah sanders-johnson
-october 11 2025
-Sequence
-make a doubly linked list
+october 25 2025
+HashTable
+Make a HashTable
 */
