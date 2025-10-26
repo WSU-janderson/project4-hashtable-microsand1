@@ -14,6 +14,18 @@ Make a HashTable
 
 using namespace std;
 
+class HashTableBucket {
+    //constructors
+    HashTableBucket();
+    HashTableBucket(const std::string& key, const size_t& value);
+
+    // the better stuff
+    void load(const std::string& key, const size_t& value);
+    bool isEmpty() const;
+    friend ostream& operator<<(ostream& os, const HashTableBucket& bucket);
+
+};
+
 class HashTable {
 public:
 
