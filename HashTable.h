@@ -14,6 +14,8 @@ Make a HashTable
 
 using namespace std;
 
+enum class BucketType {NORMAL, ESS, EAR};
+
 class HashTableBucket {
     //constructors
     HashTableBucket();

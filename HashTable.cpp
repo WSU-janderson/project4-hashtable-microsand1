@@ -10,9 +10,14 @@ Make a HashTable
 #include <exception>
 
 using namespace std;
-
+/**
+* Only a single constructor that takes an initial capacity for the table is
+* necessary. If no capacity is given, it defaults to 8 initially
+*/
 HashTable::HashTable(size_t initCapacity) {
+    for (size_t i = 0; i<initCapacity; i++) {
 
+    }
 }
 
 bool HashTable::insert(const std::string$ key, const size_t &value) {
