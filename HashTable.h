@@ -42,6 +42,7 @@ class HashTable {
 public:
 
     HashTable(size_t initCapacity = 8);
+    ~HashTable();
 
     bool insert(const string& key, const size_t& value);
     bool remove(const string& key);
@@ -61,6 +62,8 @@ public:
 private:
     size_t numElements;
     vector<HashTableBucket> table;
+    vector<size_t> offsets;
+
 };
 
 #endif
