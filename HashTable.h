@@ -28,7 +28,7 @@ class HashTableBucket {
     bool isEmpty() const;
     friend ostream& operator<<(ostream& os, const HashTableBucket& bucket);
     void makeEAR();
-    void emptySinceStart();
+
 
 private:
     string key;

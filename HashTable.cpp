@@ -65,26 +65,38 @@ HashTable::HashTable(size_t initCapacity) {
 
 
 bool HashTable::insert(const string& key, const size_t &value) {
-
+    return false;
 }
 
 bool HashTable::remove(const string &key) {
-
+    return false;
 }
 
 bool HashTable::contains(const string &key) {
-
+    return false;
 }
 
 
-double HashTable::alpha() const {
+optional<size_t> HashTable::get(const string& key) {
+    return nullopt;
+}
 
+size_t& HashTable::operator[](const string& key) {
+    return numElements;
+};
+
+double HashTable::alpha() const {
+    return static_cast<double>(numElements)/static_cast<double>(table.size());
 }
 
 size_t HashTable::capacity() const {
-
+    return table.size();
 }
 
 size_t HashTable::size() const {
+    return numElements;
+}
+
+ostream& operator<<(ostream& os, const HashTable& hashTable) {
 
 }
