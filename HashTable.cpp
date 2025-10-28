@@ -85,6 +85,15 @@ size_t& HashTable::operator[](const string& key) {
     return numElements;
 };
 
+
+vector<string> HashTable::keys() const {
+    vector<string> result;
+    for(int i=0; i < table.size(); i++) {
+        result.push_back(table[i].key);
+    }
+    return result;
+}
+
 double HashTable::alpha() const {
     return static_cast<double>(numElements)/static_cast<double>(table.size());
 }

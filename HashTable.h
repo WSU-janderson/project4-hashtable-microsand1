@@ -19,6 +19,7 @@ using namespace std;
 enum class BucketType {NORMAL, ESS, EAR};
 
 class HashTableBucket {
+public:
     //constructors
     HashTableBucket();
     HashTableBucket(string  key, const size_t& value);
@@ -30,7 +31,7 @@ class HashTableBucket {
     void makeEAR();
 
 
-private:
+
     string key;
     size_t value;
     BucketType type;
