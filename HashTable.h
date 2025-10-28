@@ -11,6 +11,8 @@ Make a HashTable
 #include <string>
 #include <iostream>
 #include <exception>
+#include <optional>
+#include <vector>
 
 using namespace std;
 
@@ -19,12 +21,19 @@ enum class BucketType {NORMAL, ESS, EAR};
 class HashTableBucket {
     //constructors
     HashTableBucket();
-    HashTableBucket(const std::string& key, const size_t& value);
+    HashTableBucket(const string& key, const size_t& value);
 
     // the better stuff
-    void load(const std::string& key, const size_t& value);
+    void load(const string& key, const size_t& value);
     bool isEmpty() const;
     friend ostream& operator<<(ostream& os, const HashTableBucket& bucket);
+    void makeEAR();
+    void emptySinceStart();
+
+private:
+    string key;
+    size_t value;
+    BucketType type;
 
 };
 
@@ -33,13 +42,13 @@ public:
 
     HashTable(size_t initCapacity = 8);
 
-    bool insert(const std::string$ key, const size_t& value);
-    bool remove(const std::string& key);
+    bool insert(const string& key, const size_t& value);
+    bool remove(const string& key);
     bool contains(const string& key);
 
-    std::optional<size_t> get(const string& key);
+    optional<size_t> get(const string& key);
     size_t& operator[](const string& key);
-    std::vector<std::string> keys() const;
+    vector<std::string> keys() const;
 
 
     double alpha() const;

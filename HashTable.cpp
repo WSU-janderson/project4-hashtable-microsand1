@@ -6,8 +6,11 @@ Make a HashTable
 */
 
 #include "HashTable.h"
+#include <string>
 #include <iostream>
 #include <exception>
+#include <optional>
+#include <vector>
 
 using namespace std;
 
@@ -18,12 +21,12 @@ HashTableBucket::HashTableBucket() : key(""), value(0), type(BucketType::ESS) {
 }
 
 //constructor.
-HashTableBucket::HashTableBucket(const std::string& key, const size_t& value) : key(key), value(value), type(BucketType::NORMAL) {
+HashTableBucket::HashTableBucket(const string& key, const size_t& value) : key(key), value(value), type(BucketType::NORMAL) {
 
 }
 
 //Load for the bucket parameters
-void HashTableBucket::load(const std::string& key, const size_t& value) {
+void HashTableBucket::load(const string& key, const size_t& value) {
     this->key = key;
     this->value = value;
     this->type = BucketType::NORMAL;
@@ -32,6 +35,20 @@ void HashTableBucket::load(const std::string& key, const size_t& value) {
 bool HashTableBucket::isEmpty() const {
     return type == BucketType::ESS || type == BucketType::EAR;
 }
+
+void HashTableBucket::makeEAR() {
+    this->type = BucketType::EAR;
+}
+
+ostream& operator<<(ostream& os, const HashTableBucket& bucket) {
+    if (bucket.isEmpty()) {
+        os << "(Empty)";
+    } else {
+        os << "Key: " << bucket.key << ", Value: " << bucket.value;
+    }
+    return os;
+}
+
 
 
 
@@ -43,11 +60,11 @@ HashTable::HashTable(size_t initCapacity) {
 
 }
 
-bool HashTable::insert(const std::string$ key, const size_t &value) {
+bool HashTable::insert(const string& key, const size_t &value) {
 
 }
 
-bool HashTable::remove(const std::string &key) {
+bool HashTable::remove(const string &key) {
 
 }
 
