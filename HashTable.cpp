@@ -75,10 +75,6 @@ HashTable::HashTable(size_t initCapacity) {
     shuffle(offsets.begin(), offsets.end(), rng);
 }
 
-HashTable::~HashTable() {
-    delete &table;
-}
-
 bool HashTable::insert(const string& key, const size_t &value) {
     return false;
 }

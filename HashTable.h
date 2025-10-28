@@ -42,7 +42,6 @@ class HashTable {
 public:
 
     HashTable(size_t initCapacity = 8);
-    ~HashTable();
 
     bool insert(const string& key, const size_t& value);
     bool remove(const string& key);
