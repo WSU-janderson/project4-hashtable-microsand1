@@ -21,7 +21,7 @@ enum class BucketType {NORMAL, ESS, EAR};
 class HashTableBucket {
     //constructors
     HashTableBucket();
-    HashTableBucket(const string& key, const size_t& value);
+    HashTableBucket(string  key, const size_t& value);
 
     // the better stuff
     void load(const string& key, const size_t& value);
@@ -56,6 +56,10 @@ public:
     size_t size() const;
 
     friend ostream& operator<<(ostream& os, const HashTable& hashTable);
-    };
+
+private:
+    size_t numElements;
+    vector<HashTableBucket> table;
+};
 
 #endif

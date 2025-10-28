@@ -10,6 +10,7 @@ Make a HashTable
 #include <iostream>
 #include <exception>
 #include <optional>
+#include <utility>
 #include <vector>
 
 using namespace std;
@@ -21,7 +22,7 @@ HashTableBucket::HashTableBucket() : key(""), value(0), type(BucketType::ESS) {
 }
 
 //constructor.
-HashTableBucket::HashTableBucket(const string& key, const size_t& value) : key(key), value(value), type(BucketType::NORMAL) {
+HashTableBucket::HashTableBucket(string  key, const size_t& value) : key(std::move(key)), value(value), type(BucketType::NORMAL) {
 
 }
 
@@ -57,8 +58,11 @@ ostream& operator<<(ostream& os, const HashTableBucket& bucket) {
 * necessary. If no capacity is given, it defaults to 8 initially
 */
 HashTable::HashTable(size_t initCapacity) {
+    numElements=initCapacity;
 
 }
+
+
 
 bool HashTable::insert(const string& key, const size_t &value) {
 
@@ -72,3 +76,15 @@ bool HashTable::contains(const string &key) {
 
 }
 
+
+double HashTable::alpha() const {
+
+}
+
+size_t HashTable::capacity() const {
+
+}
+
+size_t HashTable::size() const {
+
+}
