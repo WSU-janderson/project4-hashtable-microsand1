@@ -43,7 +43,7 @@ public:
 
     HashTable(size_t initCapacity = 8);
 
-    bool insert(const string& key, const size_t& value);
+    bool insert(const string &key, const size_t &value);
     bool remove(const string& key);
     bool contains(const string& key);
 

@@ -44,6 +44,7 @@ bool HashTableBucket::isEmpty() const {
 
 void HashTableBucket::makeEAR() {
     this->type = BucketType::EAR;
+    this->key = "";
 }
 
 ostream& operator<<(ostream& os, const HashTableBucket& bucket) {
@@ -66,8 +67,9 @@ HashTable::HashTable(size_t initCapacity) {
     numElements=0;
     table.reserve(initCapacity);
     offsets.reserve(initCapacity);
-    for (size_t i = 1; i <= initCapacity; ++i) {
-        offsets.push_back(i);
+    for (size_t i = 0; i < initCapacity; ++i) {
+        offsets[i] = i+1;
+        table[i]=HashTableBucket();
     }
     //what did you mean by shuffle, after 20 min this is all i could find
     auto rng = std::default_random_engine {};
@@ -76,7 +78,31 @@ HashTable::HashTable(size_t initCapacity) {
 }
 
 bool HashTable::insert(const string& key, const size_t &value) {
-    return false;
+    if (contains(key)) {
+        return false;
+    }
+    bool result = false;
+    for(int i=0; i < table.size(); i++) {
+        if((table[i].type == BucketType::EAR || table[i].type == BucketType::ESS)) {
+            table[i].load(key,value);
+            result = true;
+            i = table.size();
+        }
+    }
+    if (0.5 <= alpha()) {
+        size_t cardinality = table.size()*2;
+        offsets.reserve(table.size()*2);
+        table.reserve(table.size()*2);
+        for (size_t i = 0; i < cardinality; ++i) {
+            offsets[i] = i+1;
+            if(table[i].isEmpty()&&(i>cardinality/2)) {
+                table[i]=HashTableBucket();
+            }
+        }
+    }
+
+    return result;
+
 }
 
 
@@ -104,18 +130,37 @@ bool HashTable::contains(const string &key) {
 
 
 optional<size_t> HashTable::get(const string& key) {
+    bool gate = false;
+    size_t result;
+    for(int i=0; i < table.size(); i++) {
+        if(table[i].key==key) {
+            result = table[i].value;
+            gate = true;
+        }
+    }
+    if (gate) {
+        return result;
+    }
     return nullopt;
 }
 
 size_t& HashTable::operator[](const string& key) {
-    return numElements;
+    size_t result;
+    for(int i=0; i < table.size(); i++) {
+        if(table[i].key==key) {
+            result = table[i].value;
+        }
+    }
+    return result;
 };
 
 
 vector<string> HashTable::keys() const {
     vector<string> result;
     for(int i=0; i < table.size(); i++) {
-        result.push_back(table[i].key);
+        if (!(table[i].isEmpty())) {
+            result.push_back(table[i].key);
+        }
     }
     return result;
 }
