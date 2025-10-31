@@ -64,18 +64,30 @@ ostream& operator<<(ostream& os, const HashTableBucket& bucket) {
 * necessary. If no capacity is given, it defaults to 8 initially
 */
 HashTable::HashTable(size_t initCapacity) {
-    numElements=0;
-    table.reserve(initCapacity);
-    offsets.reserve(initCapacity);
-    for (size_t i = 0; i < initCapacity; ++i) {
-        offsets[i] = i+1;
-        table[i]=HashTableBucket();
+    if (initCapacity < 8) {
+        initCapacity = 8;
     }
-    //what did you mean by shuffle, after 20 min this is all i could find
-    auto rng = std::default_random_engine {};
+    numElements = 0;
+    table.resize(initCapacity);
+    offsets.resize(initCapacity);
 
-    shuffle(offsets.begin(), offsets.end(), rng);
+    for (size_t i = 0; i < initCapacity; ++i) {
+        offsets[i] = i;
+    }
+
+    // Shuffle offsets to define random probing order
+    std::shuffle(offsets.begin(), offsets.end(), std::default_random_engine(
+        std::chrono::system_clock::now().time_since_epoch().count()
+    ));
 }
+
+
+
+size_t HashTable::hash(const string& key) const {
+    std::hash<string> hasher;
+    return hasher(key) % table.size();
+}
+
 
 bool HashTable::insert(const string& key, const size_t &value) {
     if (contains(key)) {
@@ -104,8 +116,6 @@ bool HashTable::insert(const string& key, const size_t &value) {
     return result;
 
 }
-
-
 
 bool HashTable::remove(const string &key) {
     bool result = false;
@@ -178,5 +188,12 @@ size_t HashTable::size() const {
 }
 
 ostream& operator<<(ostream& os, const HashTable& hashTable) {
+    os << "HashTable (size=" << hashTable.size()
+   << ", capacity=" << hashTable.capacity()
+   << ", alpha=" << hashTable.alpha() << ")\n";
 
+    for (size_t i = 0; i < hashTable.table.size(); ++i)
+        os << "[" << i << "]: " << hashTable.table[i] << "\n";
+
+    return os;
 }

@@ -24,6 +24,8 @@ public:
     HashTableBucket();
     HashTableBucket(string  key, const size_t& value);
 
+
+
     // the better stuff
     void load(const string& key, const size_t& value);
     bool isEmpty() const;
@@ -42,6 +44,8 @@ class HashTable {
 public:
 
     HashTable(size_t initCapacity = 8);
+
+    size_t hash(const string& key) const;
 
     bool insert(const string &key, const size_t &value);
     bool remove(const string& key);
