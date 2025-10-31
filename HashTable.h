@@ -2,7 +2,8 @@
 micah sanders-johnson
 october 25 2025
 HashTable
-Make a HashTable
+Make a HashTable using random probe
+then write about the time complexity
 */
 
 #ifndef CLASSES_HASHTABLE_H

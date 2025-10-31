@@ -2,7 +2,8 @@
 micah sanders-johnson
 october 25 2025
 HashTable
-Make a HashTable
+Make a HashTable using random probe
+then write about the time complexity
 */
 
 #include "HashTable.h"
@@ -71,7 +72,7 @@ HashTable::HashTable(size_t initCapacity) {
     table.resize(initCapacity);
     offsets.resize(initCapacity);
 
-    for (size_t i = 0; i < initCapacity; ++i) {
+    for (size_t i = 0; i < initCapacity; i++) {
         offsets[i] = i;
     }
 
@@ -112,6 +113,31 @@ bool HashTable::insert(const string& key, const size_t &value) {
     return true;
 }
 
+
+bool HashTable::remove(const string &key) {
+    size_t dex = hash(key);
+    for (size_t i = 0; i < offsets.size(); i++) {
+        size_t probeDex = (dex + offsets[i]) % table.size();
+        if (!(table[probeDex].isEmpty()) && table[probeDex].key == key) {
+            table[probeDex].makeEAR();
+            numElements--;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool HashTable::contains(const string &key) {
+    size_t dex = hash(key);
+    for (size_t i = 0; i < offsets.size(); i++) {
+        size_t probeDex = (dex + offsets[i]) % table.size();
+        if (!(table[probeDex].isEmpty()) && table[probeDex].key == key) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void HashTable::rehash() {
     size_t newSize = table.size() * 2;
     vector<HashTableBucket> oldTable = table;
@@ -123,8 +149,9 @@ void HashTable::rehash() {
     table.resize(newSize);
     offsets.resize(newSize);
 
-    for (size_t i = 0; i < newSize; ++i)
-        offsets[i] = i;
+    for (size_t i = 0; i < newSize; i++){
+    offsets[i] = i;
+    }
 
     std::shuffle(offsets.begin(), offsets.end(), std::default_random_engine(
         std::chrono::system_clock::now().time_since_epoch().count()
@@ -133,61 +160,46 @@ void HashTable::rehash() {
     //for loop for each of the indexes in old table
     //made to renew the old data into the new table
     for (auto& bucket : oldTable) {
-        if (!bucket.isEmpty())
+        if (!bucket.isEmpty()) {
             insert(bucket.key, bucket.value);
-    }
-}
-
-bool HashTable::remove(const string &key) {
-    bool result = false;
-    for(int i=0; i < table.size(); i++) {
-
-    }
-    return result;
-}
-
-bool HashTable::contains(const string &key) {
-    bool result = false;
-    for(int i=0; i < table.size(); i++) {
-        if(table[i].key==key) {
-            result = true;
         }
     }
-    return result;
 }
+
 
 
 optional<size_t> HashTable::get(const string& key) {
-    bool gate = false;
-    size_t result;
-    for(int i=0; i < table.size(); i++) {
-        if(table[i].key==key) {
-            result = table[i].value;
-            gate = true;
+    size_t dex = hash(key);
+    for (size_t i = 0; i < offsets.size(); i++) {
+        size_t probeDex = (dex + offsets[i]) % table.size();
+        if (!(table[probeDex].isEmpty()) && table[probeDex].key == key) {
+            return table[probeDex].value;
         }
-    }
-    if (gate) {
-        return result;
     }
     return nullopt;
 }
 
 size_t& HashTable::operator[](const string& key) {
-    size_t result;
-    for(int i=0; i < table.size(); i++) {
-        if(table[i].key==key) {
-            result = table[i].value;
+    size_t dex = hash(key);
+    for (size_t i = 0; i < offsets.size(); i++) {
+        size_t probeDex = (dex + offsets[i]) % table.size();
+        if (table[probeDex].isEmpty()) {
+            table[probeDex].load(key, 0);
+            numElements++;
+            return table[probeDex].value;
+        }
+        if (table[probeDex].key == key) {
+            return table[probeDex].value;
         }
     }
-    return result;
 };
 
 
 vector<string> HashTable::keys() const {
     vector<string> result;
-    for(int i=0; i < table.size(); i++) {
-        if (!(table[i].isEmpty())) {
-            result.push_back(table[i].key);
+    for (auto& bucket : table) {
+        if (!bucket.isEmpty()) {
+            result.push_back(bucket.key);
         }
     }
     return result;
@@ -205,13 +217,14 @@ size_t HashTable::size() const {
     return numElements;
 }
 
-ostream& operator<<(ostream& os, const HashTable& hashTable) {
-    os << "HashTable (size=" << hashTable.size()
-   << ", capacity=" << hashTable.capacity()
-   << ", alpha=" << hashTable.alpha() << ")\n";
-
-    for (size_t i = 0; i < hashTable.table.size(); ++i)
-        os << "[" << i << "]: " << hashTable.table[i] << "\n";
-
+ostream& operator<<(std::ostream& os, const HashTable& hashTable) {
+    for (size_t i = 0; i < hashTable.table.size(); i++) {
+        if (!hashTable.table[i].isEmpty()) {
+            os << "Bucket " << i << ": "
+               << hashTable.table[i].key << ", "
+               << hashTable.table[i].value << ">\n";
+        }
+    }
     return os;
 }
+
