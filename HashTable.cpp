@@ -183,6 +183,7 @@ size_t& HashTable::operator[](const string& key) {
     size_t dex = hash(key);
     for (size_t i = 0; i < offsets.size(); i++) {
         size_t probeDex = (dex + offsets[i]) % table.size();
+        //load key to slot if nothing found
         if (table[probeDex].isEmpty()) {
             table[probeDex].load(key, 0);
             numElements++;
