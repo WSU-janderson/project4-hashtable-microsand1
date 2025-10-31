@@ -51,6 +51,8 @@ public:
     bool remove(const string& key);
     bool contains(const string& key);
 
+    void rehash();
+
     optional<size_t> get(const string& key);
     size_t& operator[](const string& key);
     vector<std::string> keys() const;

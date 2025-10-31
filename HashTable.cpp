@@ -93,37 +93,55 @@ bool HashTable::insert(const string& key, const size_t &value) {
     if (contains(key)) {
         return false;
     }
-    bool result = false;
-    for(int i=0; i < table.size(); i++) {
-        if((table[i].type == BucketType::EAR || table[i].type == BucketType::ESS)) {
-            table[i].load(key,value);
-            result = true;
-            i = table.size();
-        }
-    }
-    if (0.5 <= alpha()) {
-        size_t cardinality = table.size()*2;
-        offsets.reserve(table.size()*2);
-        table.reserve(table.size()*2);
-        for (size_t i = 0; i < cardinality; ++i) {
-            offsets[i] = i+1;
-            if(table[i].isEmpty()&&(i>cardinality/2)) {
-                table[i]=HashTableBucket();
-            }
+
+    size_t dex = hash(key);
+    for (size_t i = 0; i < offsets.size(); i++) {
+        size_t probeDex = (dex + offsets[i]) % table.size();
+        if (table[probeDex].isEmpty()) {
+            table[probeDex].load(key, 0);
+            numElements++;
+            //break out of loop
+            break;
         }
     }
 
-    return result;
+    if (alpha() >= 0.5) {
+        rehash();
+    }
 
+    return true;
+}
+
+void HashTable::rehash() {
+    size_t newSize = table.size() * 2;
+    vector<HashTableBucket> oldTable = table;
+    numElements = 0;
+
+    // clear the table then resize to double
+    table.clear();
+    offsets.clear();
+    table.resize(newSize);
+    offsets.resize(newSize);
+
+    for (size_t i = 0; i < newSize; ++i)
+        offsets[i] = i;
+
+    std::shuffle(offsets.begin(), offsets.end(), std::default_random_engine(
+        std::chrono::system_clock::now().time_since_epoch().count()
+    ));
+
+    //for loop for each of the indexes in old table
+    //made to renew the old data into the new table
+    for (auto& bucket : oldTable) {
+        if (!bucket.isEmpty())
+            insert(bucket.key, bucket.value);
+    }
 }
 
 bool HashTable::remove(const string &key) {
     bool result = false;
     for(int i=0; i < table.size(); i++) {
-        if(table[i].key==key) {
-            result = true;
-            table[i].makeEAR();
-        }
+
     }
     return result;
 }
