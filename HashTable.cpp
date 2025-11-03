@@ -219,7 +219,7 @@ ostream& operator<<(std::ostream& os, const HashTable& hashTable) {
         if (!hashTable.table[i].isEmpty()) {
             os << "Bucket " << i << ": "
                << hashTable.table[i].key << ", "
-               << hashTable.table[i].value << ">\n";
+               << hashTable.table[i].value << "\n";
         }
     }
     return os;
