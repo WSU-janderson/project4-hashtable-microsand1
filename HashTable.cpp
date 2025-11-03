@@ -77,9 +77,7 @@ HashTable::HashTable(size_t initCapacity) {
     }
 
     // Shuffle offsets to define random probing order
-    std::shuffle(offsets.begin(), offsets.end(), std::default_random_engine(
-        std::chrono::system_clock::now().time_since_epoch().count()
-    ));
+    std::shuffle(offsets.begin(), offsets.end(), std::default_random_engine());
 }
 
 
@@ -153,9 +151,7 @@ void HashTable::rehash() {
     offsets[i] = i;
     }
 
-    std::shuffle(offsets.begin(), offsets.end(), std::default_random_engine(
-        std::chrono::system_clock::now().time_since_epoch().count()
-    ));
+    std::shuffle(offsets.begin(), offsets.end(), std::default_random_engine());
 
     //for loop for each of the indexes in old table
     //made to renew the old data into the new table
