@@ -97,7 +97,7 @@ bool HashTable::insert(const string& key, const size_t &value) {
     for (size_t i = 0; i < offsets.size(); i++) {
         size_t probeDex = (dex + offsets[i]) % table.size();
         if (table[probeDex].isEmpty()) {
-            table[probeDex].load(key, 0);
+            table[probeDex].load(key, value);
             numElements++;
             //break out of loop
             break;
